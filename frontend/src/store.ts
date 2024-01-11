@@ -17,6 +17,11 @@ interface BookStore extends BookState {
   addBook: (newBook: Book) => void
   removeBook: (bookToRemove: Book) => void
   moveBook: (bookToMove: Book, newStatus: Book["status"]) => void
+  reorderBooks: (
+    listType: Book["status"],
+    startIndex: number,
+    endIndex: number,
+  ) => void
   loadBooksFromLocalStorage: () => void
 }
 
@@ -27,7 +32,14 @@ export const useStore = create<BookStore>((set) => ({
     set((state: BookState) => {
       const updatedBooks: Book[] = [
         ...state.books,
-        { ...newBook, status: "backlog" },
+        {
+          key: newBook.key,
+          title: newBook.title,
+          author_name: newBook.author_name,
+          first_publish_year: newBook.first_publish_year,
+          number_of_pages_median: newBook.number_of_pages_median || null,
+          status: newBook.status || "backlog",
+        },
       ]
 
       localStorage.setItem("readingList", JSON.stringify(updatedBooks))
@@ -56,6 +68,27 @@ export const useStore = create<BookStore>((set) => ({
       )
 
       localStorage.setItem("readingList", JSON.stringify(updatedBooks))
+
+      return { books: updatedBooks }
+    }),
+
+  reorderBooks: (
+    listType: Book["status"],
+    startIndex: number,
+    endIndex: number,
+  ) =>
+    set((state: BookState) => {
+      const filteredBooks = state.books.filter(
+        (book) => book.status === listType,
+      )
+
+      const [reorderedBook] = filteredBooks.splice(startIndex, 1)
+
+      filteredBooks.splice(endIndex, 0, reorderedBook)
+
+      const updatedBooks = state.books.map((book) =>
+        book.status === listType ? filteredBooks.shift() || book : book,
+      )
 
       return { books: updatedBooks }
     }),

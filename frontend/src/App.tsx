@@ -2,7 +2,8 @@ import BookSearch from "@/components/BookSearch"
 import { useEffect } from "react"
 import BookList from "@/components/BookList"
 import { useStore } from "@/store"
-
+import Layout from "./components/Layout"
+import { TooltipProvider } from "@/components/ui/tooltip"
 const App = () => {
   const { loadBooksFromLocalStorage } = useStore((state) => state)
 
@@ -11,10 +12,12 @@ const App = () => {
   }, [loadBooksFromLocalStorage])
 
   return (
-    <div className="container mx-auto">
-      <BookSearch />
-      <BookList />
-    </div>
+    <Layout>
+      {/* <BookSearch /> */}
+      <TooltipProvider>
+        <BookList />
+      </TooltipProvider>
+    </Layout>
   )
 }
 
