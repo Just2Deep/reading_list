@@ -22,7 +22,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import BookSearch, { SearchDialog } from "@/components/BookSearch"
+import { BookSearch } from "@/components/BookSearch"
 
 const BookList = () => {
   const { books, removeBook, moveBook, reorderBooks } = useStore(
@@ -149,9 +149,9 @@ const BookList = () => {
           My Reading List
         </h2>
         <div className="h-full ">
-          <SearchDialog>
-            <BookSearch />
-          </SearchDialog>
+          {/* <SearchDialog> */}
+          <BookSearch />
+          {/* </SearchDialog> */}
         </div>
       </div>
       <h3 className="my-2 flex items-end gap-2 text-xl font-semibold dark:text-white">
